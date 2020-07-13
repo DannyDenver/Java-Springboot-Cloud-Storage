@@ -1,7 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
-import org.springframework.security.core.parameters.P;
-
 public class Note {
     private Integer noteid;
     private String notetitle;
@@ -41,5 +39,13 @@ public class Note {
 
     public Integer getUserId() {
         return this.userid;
+    }
+
+    public Integer getNoteid() {
+        return this.noteid;
+    }
+
+    public void setNoteid(Integer id) {
+        this.noteid = id;
     }
 }

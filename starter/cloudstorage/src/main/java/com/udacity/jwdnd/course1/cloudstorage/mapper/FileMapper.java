@@ -8,7 +8,7 @@ public interface FileMapper {
 
     @Insert("INSERT INTO FILES(filename, contenttype, filesize, userid, filedata) VALUES(#{filename}, #{contenttype}, #{filesize}, #{userid}, #{filedata})")
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
-    int insert(File file);
+    int insertFile(File file);
 
     @Select("SELECT * FROM FILES WHERE userid = #{userid}")
     File[] getFiles(Integer userid);

@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.CredentialForm;
+import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
@@ -33,7 +34,9 @@ public class HomeController {
         model.addAttribute("files", fileService.getFiles(authentication));
         model.addAttribute("notes", noteService.getNotes(authentication));
         model.addAttribute("credentials", credentialService.getCredentials(authentication));
+
         model.addAttribute("credentialForm", new CredentialForm());
+        model.addAttribute("noteForm", new NoteForm());
 
         return "home";
     }

@@ -32,10 +32,15 @@ public class CredentialService {
 
         credentialMapper.insert(credential);
     }
+
+    public void deleteCredential(Integer credentialId) {
+        credentialMapper.deleteCredential(credentialId);
+    }
+
     public void updateCredential(CredentialForm credentialForm) {
         String key = encryptionService.getEncodedKey();
         String encryptedPassword = encryptionService.encryptValue(credentialForm.getPassword(), key);
-        Credential credential = new Credential(credentialForm.getCredentialId(), credentialForm.getUrl(), credentialForm.getUsername(), key, encryptedPassword);
+        Credential credential = new Credential(credentialForm.getCredentialId(), credentialForm.getUrl(), credentialForm.getUsername(), key, encryptedPassword, null);
 
         credentialMapper.update(credential);
     }

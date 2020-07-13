@@ -27,11 +27,23 @@ public class NoteService {
         return notemapper.getNotes(user.getUserId());
     }
 
+    public void deleteNote(Integer noteId) {
+        notemapper.deleteNote(noteId);
+    }
+
     public void saveNote(NoteForm noteForm, Authentication authentication) {
         User user = userMapper.getUser(authentication.getName());
 
         Note note = new Note(noteForm.getNoteTitle(), noteForm.getNoteDescription(), user.getUserId());
 
-        notemapper.insert(note);
+        notemapper.insertNote(note);
     }
+
+    public void updateNote(NoteForm noteForm) {
+        Note updatedNote = new Note(noteForm.getNoteid(), noteForm.getNoteTitle(), noteForm.getNoteDescription(), null);
+
+        notemapper.updateNote(updatedNote);
+    }
+
+
 }

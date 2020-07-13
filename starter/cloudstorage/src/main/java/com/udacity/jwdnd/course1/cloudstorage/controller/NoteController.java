@@ -7,6 +7,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -19,9 +20,14 @@ public class NoteController {
     }
 
     @PostMapping("/addNote")
-    public String postNote(Authentication authentication, NoteForm note, Model model) {
+    public String postNote(Authentication authentication, NoteForm noteForm, Model model) {
         try {
-            noteService.saveNote(note, authentication);
+            if(noteForm.getNoteid() != null) {
+                noteService.updateNote(noteForm);
+            }else {
+                noteService.saveNote(noteForm, authentication);
+            }
+
             model.addAttribute("success", true);
         }catch (Exception exception) {
             model.addAttribute("uploadError", exception.getMessage());
@@ -30,4 +36,15 @@ public class NoteController {
         return "result";
     }
 
+    @PostMapping("/notes/{id}/delete")
+    public String deleteCredential(@PathVariable(value="id") Integer id, Model model) {
+        try {
+            noteService.deleteNote(id);
+            model.addAttribute("success", true);
+        }catch(Exception exception) {
+            model.addAttribute("uploadError", exception.getMessage());
+        }
+
+        return "result";
+    }
 }

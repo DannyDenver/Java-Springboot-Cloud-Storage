@@ -49,7 +49,7 @@ public class FileService {
                 user.getUserId(),
                 fis.readAllBytes());
 
-        fileMapper.insert(file);
+        fileMapper.insertFile(file);
     }
 
     public void deleteFile(Integer fileId) {
