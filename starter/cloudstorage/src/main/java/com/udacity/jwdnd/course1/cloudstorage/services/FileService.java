@@ -25,6 +25,12 @@ public class FileService {
         this.userMapper = userMapper;
     }
 
+    public File[] getFiles(Authentication authentication)
+    {
+        User user = userMapper.getUser(authentication.getName());
+        return fileMapper.getFiles(user.getUserId());
+    }
+
     public ResponseEntity<ByteArrayResource> getFile(Integer fileId) {
         File file = fileMapper.getFile(fileId);
 

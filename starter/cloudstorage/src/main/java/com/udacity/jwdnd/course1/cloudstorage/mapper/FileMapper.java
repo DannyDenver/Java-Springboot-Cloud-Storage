@@ -10,8 +10,8 @@ public interface FileMapper {
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
     int insert(File file);
 
-    @Select("SELECT * FROM FILES")
-    File[] getFiles();
+    @Select("SELECT * FROM FILES WHERE userid = #{userid}")
+    File[] getFiles(Integer userid);
 
     @Select("SELECT * FROM FILES WHERE fileId = #{fileId}")
     File getFile(Integer fileId);
