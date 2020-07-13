@@ -32,13 +32,22 @@ public class CredentialService {
 
         credentialMapper.insert(credential);
     }
+    public void updateCredential(CredentialForm credentialForm) {
+        String key = encryptionService.getEncodedKey();
+        String encryptedPassword = encryptionService.encryptValue(credentialForm.getPassword(), key);
+        Credential credential = new Credential(credentialForm.getCredentialId(), credentialForm.getUrl(), credentialForm.getUsername(), key, encryptedPassword);
+
+        credentialMapper.update(credential);
+    }
 
     public List<Credential> getCredentials(Authentication authentication) {
         User user = userMapper.getUser(authentication.getName());
+        List<Credential> credentials = credentialMapper.getCredentials(user.getUserId());
 
-        return credentialMapper.getCredentials(user.getUserId());
+        for (Credential credential: credentials) {
+            credential.setUnencryptedPassword(encryptionService.decryptValue(credential.getEncryptedPassword(), credential.getKey()));
+        }
+
+        return credentials;
     }
-
-
-
 }

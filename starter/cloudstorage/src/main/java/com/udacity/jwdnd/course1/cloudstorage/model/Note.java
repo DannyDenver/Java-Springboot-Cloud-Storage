@@ -14,6 +14,13 @@ public class Note {
         this.userid = userid;
     }
 
+    public Note(Integer noteid, String notetitle, String notedescription, Integer userid) {
+        this.noteid = noteid;
+        this.notetitle = notetitle;
+        this.notedescription = notedescription;
+        this.userid = userid;
+    }
+
     public void setNotetitle(String title) {
         this.notetitle = title;
     }

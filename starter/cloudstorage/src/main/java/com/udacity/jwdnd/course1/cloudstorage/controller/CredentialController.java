@@ -22,7 +22,12 @@ public class CredentialController {
     @PostMapping("/addCredential")
     public String postNote(@ModelAttribute("credentialForm") CredentialForm credentialForm, Authentication authentication, Model model) {
         try {
-            credentialService.addCredential(authentication, credentialForm);
+            if(credentialForm.getCredentialId() != null) {
+                credentialService.updateCredential(credentialForm);
+            }else {
+                credentialService.addCredential(authentication, credentialForm);
+            }
+
             model.addAttribute("success", true);
         }catch (Exception exception) {
             model.addAttribute("uploadError", exception.getMessage());
