@@ -84,7 +84,7 @@
                         <tbody>
                         <tr th:each="note:${notes}" th:object="${note}">
                             <td>
-                                <button type="button" class="btn btn-success"
+                                <button type="button" class="btn btn-success edit-note"
                                         th:data-noteid="*{noteid}"
                                         th:data-notetitle="*{notetitle}"
                                         th:data-notedescription="*{notedescription}"
@@ -92,7 +92,7 @@
                                     Edit
                                 </button>
                                 <form action="#" th:method="post" th:action="@{/notes/{id}/delete(id=*{noteid})}">
-                                    <button type="submit" class="btn btn-danger" name="delete">Delete</button>
+                                    <button type="submit" class="btn btn-danger delete-note" name="delete">Delete</button>
                                 </form>
                             </td>
                             <th class="noteTitle" scope="row" th:text="*{notetitle}">Example Note Title</th>
@@ -112,7 +112,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body" id="noteModal">
+                            <div class="modal-body">
                                 <form action="#" th:object="${noteForm}" th:action="@{/addNote}" method="POST">
                                     <input type="hidden" th:field="*{noteid}" name="noteId" id="note-id">
                                     <div class="form-group">
@@ -140,7 +140,7 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
-                <button style="margin: 0.25em;" type="button" class="btn btn-info float-right"
+                <button id="showCredentialModal" style="margin: 0.25em;" type="button" class="btn btn-info float-right"
                         onclick="showCredentialModal()">
                     + Add a New Credential
                 </button>
@@ -158,7 +158,7 @@
                         <tbody>
                         <tr th:each="credential:${credentials}" th:object="${credential}">
                             <td>
-                                <button type="button" class="btn btn-success"
+                                <button type="button" class="btn btn-success edit-credential"
                                         th:data-credid="*{credentialid}"
                                         th:data-username="*{username}"
                                         th:data-password="*{unencryptedPassword}"
@@ -168,12 +168,13 @@
                                 </button>
                                 <form action="#" th:method="post"
                                       th:action="@{/credential/{id}/delete(id=*{credentialid})}">
-                                    <button type="submit" class="btn btn-danger" name="delete">Delete</button>
+                                    <button type="submit" class="btn btn-danger delete-credential" name="delete">
+                                        Delete</button>
                                 </form>
                             </td>
-                            <th scope="row" th:text="*{url}">Example Credential URL</th>
-                            <td th:text="*{username}">Example Credential Username</td>
-                            <td th:text="*{encryptedPassword}">Example Credential Password</td>
+                            <th class="credential-url" scope="row" th:text="*{url}">Example Credential URL</th>
+                            <td class="credential-username" th:text="*{username}">Example Credential Username</td>
+                            <td class="credential-password" th:text="*{encryptedPassword}">Example Credential Password</td>
                         </tr>
                         </tbody>
                     </table>
