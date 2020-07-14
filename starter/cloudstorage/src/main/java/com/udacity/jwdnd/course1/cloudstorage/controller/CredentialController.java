@@ -37,17 +37,6 @@ public class CredentialController {
         return "result";
     }
 
-//    @PostMapping("/credentials/{id}/edit")
-//    public String addCredential(@ModelAttribute("credentialForm") CredentialForm credentialForm, @PathVariable(value="id") Integer id, Authentication authentication, Model model) {
-//        try {
-//            credentialService.updateCredential(credentialForm);
-//            model.addAttribute("success", true);
-//        }catch (Exception exception) {
-//            model.addAttribute("uploadError", exception.getMessage());
-//        }
-//
-//        return "result";
-//    }
 
     @PostMapping("/credential/{id}/delete")
     public String deleteCredential(@PathVariable(value="id") Integer id, Model model) {
