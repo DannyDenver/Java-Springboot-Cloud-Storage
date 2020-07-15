@@ -24,6 +24,11 @@ public class FileController {
 
     @PostMapping("/file-upload")
     public String fileUpload(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication authentication, Model model) {
+        if(!fileService.isFilenameAvailable(fileUpload.getOriginalFilename())) {
+            model.addAttribute("uploadError", "Duplicate filename. Filenames must be unique.");
+            return "result";
+        }
+
         try {
             fileService.uploadFile(fileUpload, authentication);
             model.addAttribute("success", true);

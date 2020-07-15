@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -77,8 +78,11 @@ public class HomePage {
 
     private WebDriver driver;
 
+    private JavascriptExecutor jse;
+
     public HomePage(WebDriver driver) {
         this.driver = driver;
+        this.jse = (JavascriptExecutor) driver;
         PageFactory.initElements(driver, this);
     }
 
@@ -86,37 +90,31 @@ public class HomePage {
         logoutButton.click();
     }
 
-    public void navigateToNotesTab() {
-        notesTab.click();
-    };
+    public void showCredentials() {
+        jse.executeScript("document.getElementById('nav-credentials-tab').click()");
 
-    public void navigateToCredentialsTab() {
-        credentialsTab.click();
     }
 
     public void showNotes() {
-        WebElement tab = driver.findElement(By.xpath("//a[@href='#nav-notes']"));
-
-        tab.click();
+        jse.executeScript("document.getElementById('nav-notes-tab').click()");
     }
 
     public void showNotesModal() {
-        showNoteModalButton.click();
+        jse.executeScript("document.getElementById('showNoteModalButton').click()");
     }
 
-    public void createNote(String title, String description) throws InterruptedException {
-        Thread.sleep(500);
-        noteTitleInput.sendKeys(title);
-        noteDescriptionInput.sendKeys(description);
-
-        noteSubmitButton.submit();
+    public void createNote(String title, String description)  {
+        jse.executeScript("document.getElementById('note-title').value=\"" + title + "\";"); //.value = "+ title + ";
+        jse.executeScript("document.getElementById('note-description').value=\"" + description + "\";");
+        jse.executeScript("document.getElementById('noteSubmit').click()");
     }
 
     public String getFirstNoteDescription() {
         return this.firstNoteDescription.getText();
     }
 
-    public String geFirstNoteTitle() {
+    public String geFirstNoteTitle()
+    {
         return firstNoteTitle.getText();
     }
 
@@ -132,18 +130,11 @@ public class HomePage {
         return firstCredentialEncryptedPassword.getText();
     }
 
-    public void editNote(String title, String description) throws InterruptedException {
-        Thread.sleep(500);
-
+    public void editNote(String title, String description)  {
         editNoteButton.click();
-
-        noteTitleInput.clear();
-        noteDescriptionInput.clear();
-
-        noteTitleInput.sendKeys(title);
-        noteDescriptionInput.sendKeys(description);
-
-        noteSubmitButton.submit();
+        jse.executeScript("document.getElementById('note-title').value=\"" + title + "\";"); //.value = "+ title + ";
+        jse.executeScript("document.getElementById('note-description').value=\"" + description + "\";");
+        jse.executeScript("document.getElementById('noteSubmit').click()");
     }
 
     public void deleteNote() {
@@ -154,13 +145,14 @@ public class HomePage {
         showCredentialModalButton.click();
     }
 
-    public void addCredential(String url, String username, String password) throws InterruptedException {
-        Thread.sleep(500);
+    public void addCredential(String url, String username, String password) {
+        jse.executeScript("document.getElementById('showCredentialModal').click()");
+        jse.executeScript("document.getElementById('credential-url').value=\"" + url + "\";"); //.value = "+ title + ";
+        jse.executeScript("document.getElementById('credential-username').value=\"" + username + "\";");
 
-        credentialUrlInput.sendKeys(url);
-        credentialUsernameInput.sendKeys(username);
-        credentialPasswordInput.sendKeys(password);
-        submitCredentialButton.submit();
+        jse.executeScript("document.getElementById('credential-password').value=\"" + password + "\";");
+        jse.executeScript("document.getElementById('credentialSubmit').click()");
+
     }
 
     public void showCredentialModal() {
@@ -168,12 +160,9 @@ public class HomePage {
     }
 
     public void editCredentialUsername(String username) throws InterruptedException {
-        Thread.sleep(500);
+        jse.executeScript("document.getElementById('credential-username').value=\"" + username + "\";");
+        jse.executeScript("document.getElementById('credentialSubmit').click()");
 
-        credentialUsernameInput.clear();
-
-        credentialUsernameInput.sendKeys(username);
-        submitCredentialButton.submit();
     }
 
     public String getUnencryptedPassword() {

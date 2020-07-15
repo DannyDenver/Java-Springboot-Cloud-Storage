@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -34,10 +35,19 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach()
 	{
-		baseUrl = baseUrl = "http://localhost:" + this.port;
+		baseUrl = "http://localhost:" + this.port;
 		this.driver = new ChromeDriver();
 		this.driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+	}
 
+	@AfterEach
+	public void afterEach() {
+		if (this.driver != null) {
+			driver.quit();
+		}
+	}
+
+	public void signupAndLoginUser() {
 		String first = "Dan";
 		String last = "Tay";
 		String username = "dan";
@@ -50,13 +60,6 @@ class CloudStorageApplicationTests {
 		driver.get(baseUrl + "/login");
 		LoginPage login = new LoginPage(driver);
 		login.login(username, password);
-	}
-
-	@AfterEach
-	public void afterEach() {
-		if (this.driver != null) {
-			driver.quit();
-		}
 	}
 
 	@Test
@@ -73,6 +76,8 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void signupLoginHomePageLogoutSuccess() {
+		signupAndLoginUser();
+
 		Assertions.assertEquals("Home", driver.getTitle());
 
 		HomePage homepage = new HomePage(driver);
@@ -86,46 +91,26 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void createEditDeleteNote() throws InterruptedException {
+		signupAndLoginUser();
+
 		String title = "test";
 		String description = "description of note";
 
 		HomePage homePage = new HomePage(driver);
 
-		WebDriverWait wait = new WebDriverWait(driver, 4, 500);
-		WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='#nav-notes']")));
-
-		WebElement tab = driver.findElement(By.xpath("//a[@href='#nav-notes']"));
-
-		tab.click();
-		Thread.sleep(500);
-
-		WebDriverWait wait2 = new WebDriverWait(driver, 10, 500);
-		WebElement button2 = wait2.until(ExpectedConditions.elementToBeClickable(By.id("showNoteModalButton")));
+		homePage.showNotes();
 
 		homePage.showNotesModal();
-		WebDriverWait wait3 = new WebDriverWait(driver, 4, 2000);
-		wait2.until(webDriver -> webDriver.findElement(By.id("noteModal")));
 
 		homePage.createNote(title, description);
-
-		WebDriverWait wait4 = new WebDriverWait(driver, 4);
-		wait3.until(webDriver -> webDriver.findElement(By.id("results-view")));
 
 		Assertions.assertEquals("Result", driver.getTitle());
 
 		driver.get(baseUrl + "/home");
-		WebDriverWait wait5 = new WebDriverWait(driver, 4);
-		wait4.until(webDriver -> webDriver.findElement(By.className("noteTitle")));
 
 		homePage = new HomePage(driver);
+		homePage.showNotes();
 
-		WebElement tab2 = driver.findElement(By.xpath("//a[@href='#nav-notes']"));
-
-		tab2.click();
-
-		WebElement note = new WebDriverWait(driver, 2).until(driver -> driver.findElement(By.className("noteTitle")));
-
-		Thread.sleep(2000);
 
 		Assertions.assertEquals(title, homePage.geFirstNoteTitle());
 		Assertions.assertEquals(description, homePage.getFirstNoteDescription());
@@ -134,37 +119,22 @@ class CloudStorageApplicationTests {
 		String editedDescription = "description of note edit";
 
 		homePage.editNote(editedTitle, editedDescription);
-
-		WebDriverWait wait6 = new WebDriverWait(driver, 4, 500);
-		wait6.until(webDriver -> webDriver.findElement(By.id("results-view")));
-
-		Assertions.assertEquals("Result", driver.getTitle());
-		Thread.sleep(5000);
-
 		driver.get(baseUrl + "/home");
 
 		homePage = new HomePage(driver);
-
 		homePage.showNotes();
 
-		WebElement tab3 = driver.findElement(By.xpath("//a[@href='#nav-notes']"));
-
-		tab3.click();
-
-		WebElement note2 = new WebDriverWait(driver, 2).until(driver -> driver.findElement(By.className("noteTitle")));
-
-		Thread.sleep(2000);//
+		WebDriverWait wait = new WebDriverWait(driver, 4, 500);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("noteTitle")));
 
 		Assertions.assertEquals(editedTitle, homePage.geFirstNoteTitle());
 		Assertions.assertEquals(editedDescription, homePage.getFirstNoteDescription());
-		Thread.sleep(2000);
 
 		homePage.deleteNote();
 
 		driver.get(baseUrl + "/home");
-		Thread.sleep(2000);
-
 		homePage = new HomePage(driver);
+		homePage.showNotes();
 
 		HomePage finalHomePage = homePage;
 		Assertions.assertThrows(org.openqa.selenium.NoSuchElementException.class, () -> finalHomePage.getFirstNoteDescription());
@@ -172,74 +142,64 @@ class CloudStorageApplicationTests {
 
 	@Test
 	public void createViewEditDeleteCredential() throws InterruptedException {
+		signupAndLoginUser();
+
 		String url = "google.com";
 		String username = "dan";
 		String password = "isawesome44";
 
 		HomePage homePage = new HomePage(driver);
 
-		WebDriverWait wait = new WebDriverWait(driver, 4, 500);
-		WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='#nav-credentials']")));
-
-		button.click();
-		Thread.sleep(500);
-
-		homePage.showNewCredentialModal();
-		Thread.sleep(2000);
+		homePage.showCredentials();
 
 		homePage.addCredential(url, username, password);
 
-		Thread.sleep(2000);
 		Assertions.assertEquals("Result", driver.getTitle());
 
 		driver.get(baseUrl + "/home");
 
-		HomePage homePage2 = new HomePage(driver);
+		homePage = new HomePage(driver);
 
-		WebDriverWait wait2 = new WebDriverWait(driver, 4, 500);
-		WebElement navCredentialsButton2 = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='#nav-credentials']")));
+		homePage.showCredentials();
 
-		navCredentialsButton2.click();
+		WebDriverWait wait = new WebDriverWait(driver, 4, 500);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("credential-url")));
 
-		Thread.sleep(1000);
+		Assertions.assertEquals(homePage.getFirstCredentialUsername(), username);
+		Assertions.assertEquals(homePage.getFirstCredentialUrl(), url);
+		Assertions.assertNotEquals(homePage.getFirstCredentialEncryptedPassword(), password);
 
-		Assertions.assertEquals(homePage2.getFirstCredentialUsername(), username);
-		Assertions.assertEquals(homePage2.getFirstCredentialUrl(), url);
-		Assertions.assertNotEquals(homePage2.getFirstCredentialEncryptedPassword(), password);
+		homePage.showCredentialModal();
 
-		homePage2.showCredentialModal();
-		Thread.sleep(1000);
-
-		Assertions.assertEquals(homePage2.getUnencryptedPassword(), password);
-		Thread.sleep(2000);
+		Assertions.assertEquals(homePage.getUnencryptedPassword(), password);
 
 		String newUsername = "dantheman";
 
-		homePage2.editCredentialUsername(newUsername);
+		homePage.editCredentialUsername(newUsername);
 
-		Thread.sleep(500);
 		Assertions.assertEquals("Result", driver.getTitle());
 
 		driver.get(baseUrl + "/home");
 
-		HomePage homePage3 = new HomePage(driver);
+		homePage = new HomePage(driver);
 
-		WebDriverWait wait3 = new WebDriverWait(driver, 4, 500);
-		WebElement navCredentialsButton3 = wait3.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='#nav-credentials']")));
+		homePage.showCredentials();
 
-		navCredentialsButton3.click();
+		wait = new WebDriverWait(driver, 4, 500);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("credential-url")));
 
-		Thread.sleep(1000);
+		Assertions.assertEquals(homePage.getFirstCredentialUsername(), newUsername);
 
-		Assertions.assertEquals(homePage3.getFirstCredentialUsername(), newUsername);
+		homePage.deleteCredential();
 
-		homePage3.deleteCredential();
-
-		Thread.sleep(500);
 		Assertions.assertEquals("Result", driver.getTitle());
 
 		driver.get(baseUrl + "/home");
 
-		Assertions.assertThrows(org.openqa.selenium.NoSuchElementException.class, () -> homePage3.getFirstCredentialUrl());
+		homePage.showCredentials();
+
+		HomePage finalHomePage = new HomePage(driver);
+
+		Assertions.assertThrows(org.openqa.selenium.NoSuchElementException.class, () -> finalHomePage.getFirstCredentialUrl());
 	}
 }

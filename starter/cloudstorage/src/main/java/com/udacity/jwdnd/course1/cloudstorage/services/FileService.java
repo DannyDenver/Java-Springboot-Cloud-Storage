@@ -25,6 +25,10 @@ public class FileService {
         this.userMapper = userMapper;
     }
 
+    public boolean isFilenameAvailable(String filename) {
+        return fileMapper.getFileByName(filename) == null;
+    }
+
     public File[] getFiles(Authentication authentication)
     {
         User user = userMapper.getUser(authentication.getName());
