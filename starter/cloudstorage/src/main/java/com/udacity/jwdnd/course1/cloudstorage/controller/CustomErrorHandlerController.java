@@ -18,6 +18,6 @@ public class CustomErrorHandlerController implements ErrorController {
 
     @GetMapping("/error")
     public String handleError(HttpServletRequest request, Model model) {
-        return "404";
+        return "error";
     }
 }
