@@ -2,13 +2,19 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+
     <title>Error</title>
 </head>
-
 <body>
-
-<h1>Something went wrong!</h1>
-<p>The link you followed may be broken, or the page may have been removed.</p>
-
+<div id="error-view" class="container justify-content-center w-50 p-3" style="margin-top: 5em;">
+    <div class="alert alert-danger fill-parent">
+        <h1 class="display-5">Ooops! Page Not Found</h1>
+        <span>The page you are looking for either does not exist or was removed. Click <a  th:href="@{/home}">here</a> to return home.</span>
+    </div>
+</div>
 </body>
 </html>

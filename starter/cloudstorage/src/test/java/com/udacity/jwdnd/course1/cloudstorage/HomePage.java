@@ -87,7 +87,7 @@ public class HomePage {
     }
 
     public void logout() {
-        logoutButton.click();
+        jse.executeScript("document.getElementById('logout-button').click()");
     }
 
     public void showCredentials() {
@@ -159,7 +159,7 @@ public class HomePage {
         editCredentialButton.click();
     }
 
-    public void editCredentialUsername(String username) throws InterruptedException {
+    public void editCredentialUsername(String username) {
         jse.executeScript("document.getElementById('credential-username').value=\"" + username + "\";");
         jse.executeScript("document.getElementById('credentialSubmit').click()");
 

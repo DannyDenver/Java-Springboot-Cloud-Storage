@@ -78,6 +78,9 @@ class CloudStorageApplicationTests {
 	public void signupLoginHomePageLogoutSuccess() {
 		signupAndLoginUser();
 
+		WebDriverWait wait = new WebDriverWait(driver, 4, 500);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("nav-tabContent")));
+
 		Assertions.assertEquals("Home", driver.getTitle());
 
 		HomePage homepage = new HomePage(driver);
@@ -90,7 +93,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void createEditDeleteNote() throws InterruptedException {
+	public void createEditDeleteNote() {
 		signupAndLoginUser();
 
 		String title = "test";
@@ -111,6 +114,8 @@ class CloudStorageApplicationTests {
 		homePage = new HomePage(driver);
 		homePage.showNotes();
 
+		WebDriverWait wait = new WebDriverWait(driver, 4, 500);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("noteTitle")));
 
 		Assertions.assertEquals(title, homePage.geFirstNoteTitle());
 		Assertions.assertEquals(description, homePage.getFirstNoteDescription());
@@ -124,7 +129,7 @@ class CloudStorageApplicationTests {
 		homePage = new HomePage(driver);
 		homePage.showNotes();
 
-		WebDriverWait wait = new WebDriverWait(driver, 4, 500);
+		wait = new WebDriverWait(driver, 4, 500);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("noteTitle")));
 
 		Assertions.assertEquals(editedTitle, homePage.geFirstNoteTitle());
@@ -141,7 +146,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	public void createViewEditDeleteCredential() throws InterruptedException {
+	public void createViewEditDeleteCredential() {
 		signupAndLoginUser();
 
 		String url = "google.com";
